@@ -18,6 +18,9 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "is-touch-device": "^1.0.1",
+    "swipe-listener": "^1.0.7"
+  },
   "homepage": "https://media.yoox.biz/ytos/resources/ADIDASGROUP/scripts/sw/"
 }
