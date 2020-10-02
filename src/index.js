@@ -27,50 +27,53 @@ function isTouchEnabled(code) {
 export const KONAMI_CODE = [
 	{
 		key: 38,
-		touch: "up"
+		touch: "up",
 	},
 	{
 		key: 38,
-		touch: "up"
+		touch: "up",
 	},
 	{
 		key: 40,
-		touch: "down"
+		touch: "down",
 	},
 	{
 		key: 40,
-		touch: "down"
+		touch: "down",
 	},
 	{
 		key: 37,
-		touch: "left"
+		touch: "left",
 	},
 	{
 		key: 39,
-		touch: "right"
+		touch: "right",
 	},
 	{
 		key: 37,
-		touch: "left"
+		touch: "left",
 	},
 	{
 		key: 39,
-		touch: "right"
+		touch: "right",
 	},
 	{
 		key: 66,
-		touch: "tap"
+		touch: "tap",
 	},
 	{
 		key: 65,
-		touch: "tap"
+		touch: "tap",
 	},
 ];
 
 export default (expectedCode = KONAMI_CODE, cb) => {
 	let currentStatus = [];
 	let lastEventTypeIsKeyboard = true;
-	const expected = typeof expectedCode[0] === "object" ? expectedCode : expectedCode.map(key => ({ key }));
+	const expected =
+		typeof expectedCode[0] === "object"
+			? expectedCode
+			: expectedCode.map((key) => ({ key }));
 
 	function eventListener(isTouchEvent, getEvent) {
 		if (lastEventTypeIsKeyboard === isTouchEvent) {
@@ -78,7 +81,11 @@ export default (expectedCode = KONAMI_CODE, cb) => {
 			currentStatus = [];
 		}
 		currentStatus.push(getEvent());
-		const comparisonResult = compareStatus(currentStatus, expectedCode, lastEventTypeIsKeyboard);
+		const comparisonResult = compareStatus(
+			currentStatus,
+			expectedCode,
+			lastEventTypeIsKeyboard
+		);
 		if (comparisonResult === true) {
 			cb && cb();
 			const kcEvent = new Event("codeinserted");
@@ -89,11 +96,17 @@ export default (expectedCode = KONAMI_CODE, cb) => {
 		}
 	}
 
-	window.addEventListener("keyup", (e) => eventListener(false, () => e.keyCode));
+	window.addEventListener("keyup", (e) =>
+		eventListener(false, () => e.keyCode)
+	);
 
 	if (isTouchEnabled(expectedCode)) {
 		SwipeListener(window);
-		window.addEventListener("swipe", (e) => eventListener(true, () => mapTouchEvent(e.detail.directions)));
-		window.addEventListener("click", (e) => eventListener(true, () => "tap"));
+		window.addEventListener("swipe", (e) =>
+			eventListener(true, () => mapTouchEvent(e.detail.directions))
+		);
+		window.addEventListener("click", (e) =>
+			eventListener(true, () => "tap")
+		);
 	}
-}
+};
