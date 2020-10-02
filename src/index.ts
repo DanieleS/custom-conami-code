@@ -1,7 +1,25 @@
 import isTouch from "is-touch-device";
 import SwipeListener from "swipe-listener";
 
-function compareStatus(current, expected, keyboard) {
+type DirectionObj = {
+	top: boolean;
+	bottom: boolean;
+	left: boolean;
+	right: boolean;
+};
+
+type Directions = "up" | "down" | "left" | "right";
+
+type Code = readonly {
+	key: number;
+	touch: "tap" | Directions;
+}[];
+
+function compareStatus(
+	current: (number | "tap" | Directions)[],
+	expected: Code,
+	keyboard: boolean
+) {
 	const keyType = keyboard ? "key" : "touch";
 	for (let i = 0; i < current.length; i++) {
 		if (current[i] !== expected[i][keyType]) return "mismatch";
@@ -10,15 +28,15 @@ function compareStatus(current, expected, keyboard) {
 	return true;
 }
 
-function mapTouchEvent(direction) {
+function mapTouchEvent(direction: DirectionObj) {
 	if (direction.top) return "up";
 	if (direction.bottom) return "down";
 	if (direction.left) return "left";
 	if (direction.right) return "right";
-	return "banana";
+	return "up";
 }
 
-function isTouchEnabled(code) {
+function isTouchEnabled(code: Code) {
 	if (typeof code[0] === "number") return false;
 	if (!isTouch()) return false;
 	return true;
@@ -65,17 +83,16 @@ export const KONAMI_CODE = [
 		key: 65,
 		touch: "tap",
 	},
-];
+] as const;
 
-export default (expectedCode = KONAMI_CODE, cb) => {
-	let currentStatus = [];
+export default (expectedCode = KONAMI_CODE, cb: () => void) => {
+	let currentStatus: (number | "tap" | Directions)[] = [];
 	let lastEventTypeIsKeyboard = true;
-	const expected =
-		typeof expectedCode[0] === "object"
-			? expectedCode
-			: expectedCode.map((key) => ({ key }));
 
-	function eventListener(isTouchEvent, getEvent) {
+	function eventListener(
+		isTouchEvent: boolean,
+		getEvent: () => number | "tap" | Directions
+	) {
 		if (lastEventTypeIsKeyboard === isTouchEvent) {
 			lastEventTypeIsKeyboard = !lastEventTypeIsKeyboard;
 			currentStatus = [];
@@ -102,10 +119,10 @@ export default (expectedCode = KONAMI_CODE, cb) => {
 
 	if (isTouchEnabled(expectedCode)) {
 		SwipeListener(window);
-		window.addEventListener("swipe", (e) =>
+		window.addEventListener("swipe", (e: any) =>
 			eventListener(true, () => mapTouchEvent(e.detail.directions))
 		);
-		window.addEventListener("click", (e) =>
+		window.addEventListener("click", () =>
 			eventListener(true, () => "tap")
 		);
 	}
