@@ -10,17 +10,17 @@
   "author": "Delta Team",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.54",
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/preset-env": "^7.0.0-beta.54",
-    "babel-loader": "^8.0.0-beta",
-    "webpack": "^4.16.3",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5"
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "is-touch-device": "^1.0.1",
-    "swipe-listener": "^1.0.7"
+    "swipe-listener": "^1.2.0"
   },
   "homepage": "https://media.yoox.biz/ytos/resources/ADIDASGROUP/scripts/sw/"
 }
